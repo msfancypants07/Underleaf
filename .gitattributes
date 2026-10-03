@@ -1,0 +1,2 @@
+# Preserve upstream font license files verbatim.
+assets/fonts/*-OFL.txt -whitespace
