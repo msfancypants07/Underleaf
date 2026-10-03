@@ -27,8 +27,8 @@ will not automatically transfer it. Keep the `/Underleaf/play/` URL stable.
 3. Create and push a matching tag, for example:
 
    ```sh
-   git tag v0.3.2
-   git push origin v0.3.2
+   git tag v0.3.3
+   git push origin v0.3.3
    ```
 
 The Publish Mac download workflow tests, packages, ad-hoc signs, zips, and publishes

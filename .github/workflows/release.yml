@@ -25,8 +25,8 @@ jobs:
       - name: Build universal Mac app
         run: |
           python3 tools/build_macos.py
-          lipo -verify_arch arm64 x86_64 builds/Underleaf.app/Contents/MacOS/Underleaf
-          lipo -verify_arch arm64 x86_64 builds/Underleaf.app/Contents/MacOS/Engine
+          lipo builds/Underleaf.app/Contents/MacOS/Underleaf -verify_arch arm64 x86_64
+          lipo builds/Underleaf.app/Contents/MacOS/Engine -verify_arch arm64 x86_64
           cd builds
           shasum -a 256 Underleaf-macOS.zip > SHA256SUMS.txt
       - name: Publish release
