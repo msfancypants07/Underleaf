@@ -1,22 +1,55 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Underleaf — Your First Forest</title>
-<meta name="description" content="An educational cloud-forest game. Follow hidden signals, investigate shelter, and help a butterfly grow.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Underleaf — An Educational Cloud-Forest Game</title>
+<meta name="description" content="Underleaf is an educational exploration game built in Godot. Investigate a cloud forest through translated sensory views, ecological experiments, and a guided butterfly life cycle.">
 <style>
-:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#101e18;color:#ece9d5}*{box-sizing:border-box}body{margin:0}main{max-width:1060px;margin:auto;padding:70px 25px}small{color:#d0da9a;letter-spacing:.16em}h1{font:clamp(52px,9vw,100px) Georgia,serif;letter-spacing:.06em;margin:20px 0}h2{font:30px Georgia,serif}p{line-height:1.7;max-width:750px;color:#c5cebf}.links{display:flex;flex-wrap:wrap;gap:14px;margin:30px 0}a{color:#d0da9a}a.button{display:inline-block;padding:15px 22px;border:1px solid #647958;border-radius:8px;text-decoration:none;color:#ece9d5}a.primary{background:#d0da9a;color:#14251d;border-color:#d0da9a}a:hover,a:focus-visible{outline:2px solid #ece9d5;outline-offset:4px}img{width:100%;border:1px solid #34453a;border-radius:12px;margin:30px 0}.note{font-size:14px;color:#aab7a2}.columns{display:grid;grid-template-columns:1fr 1fr;gap:32px}@media(max-width:650px){main{padding-top:40px}.columns{grid-template-columns:1fr}}
+:root{color-scheme:dark;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#101e18;color:#ece9d5;--page:#101e18;--panel:#16271f;--line:#34453a;--cream:#ece9d5;--muted:#b5c0b1;--accent:#d0da9a}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 82% 8%,#193226 0,transparent 34rem),var(--page)}main{max-width:1160px;margin:auto;padding:82px 34px 96px}.eyebrow{color:var(--accent);font-size:.78rem;font-weight:650;letter-spacing:.18em;text-transform:uppercase}.hero{max-width:920px}h1{font:clamp(4rem,10vw,7.8rem)/.9 Georgia,serif;letter-spacing:.065em;margin:28px 0 24px}h2{font:clamp(1.8rem,4vw,2.8rem)/1.15 Georgia,serif;margin:0 0 20px}h3{font:1.45rem/1.25 Georgia,serif;margin:0 0 13px}p{font-size:1.06rem;line-height:1.75;color:var(--muted);margin:0 0 20px}.lede{max-width:850px;color:var(--cream);font-size:clamp(1.18rem,2.4vw,1.55rem);line-height:1.62}.links{display:flex;flex-wrap:wrap;gap:14px;margin:34px 0 18px}a{color:var(--accent)}a.button{display:inline-block;padding:15px 22px;border:1px solid #647958;border-radius:8px;text-decoration:none;color:var(--cream);font-weight:600}a.primary{background:var(--accent);color:#14251d;border-color:var(--accent)}a:hover,a:focus-visible{outline:2px solid var(--cream);outline-offset:4px}.note{font-size:.88rem;color:#9eaa9b}.wide-figure{width:min(1420px,calc(100vw - 40px));margin:64px 0 84px 50%;transform:translateX(-50%)}.wide-figure img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:contain;border:1px solid var(--line);border-radius:14px;background:#0b1511;box-shadow:0 30px 80px rgba(0,0,0,.28)}figcaption{max-width:1160px;margin:13px auto 0;color:#8f9d91;font-size:.85rem}.section{display:grid;grid-template-columns:minmax(220px,.75fr) minmax(0,1.6fr);gap:70px;padding:72px 0;border-top:1px solid var(--line)}.section-copy{max-width:760px}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0 0}.fact,.card{background:rgba(22,39,31,.76);border:1px solid var(--line);border-radius:10px;padding:22px}.fact strong{display:block;color:var(--accent);font-size:1.25rem;margin-bottom:7px}.fact span{color:var(--muted);font-size:.92rem;line-height:1.5}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.card p{font-size:.98rem;margin:0}.status{padding:27px 30px;border:1px solid var(--line);border-radius:10px;background:rgba(22,39,31,.58)}footer{padding-top:46px;border-top:1px solid var(--line);color:#889688;font-size:.9rem}footer p{font-size:.9rem}code{color:var(--cream);font-size:.92em}@media(max-width:760px){main{padding:52px 22px 70px}h1{font-size:clamp(3.2rem,17vw,5.6rem)}.section{grid-template-columns:1fr;gap:22px;padding:54px 0}.facts,.cards{grid-template-columns:1fr}.wide-figure{width:calc(100vw - 20px);margin-top:42px;margin-bottom:60px}.links{align-items:stretch}.button{text-align:center;flex:1 1 13rem}}
 </style>
 </head>
 <body><main>
-<small>A CLOUD FOREST FIELD STUDY</small><h1>UNDERLEAF</h1>
-<h2>Your First Forest</h2>
-<p>Notice the moving leaves. Follow the signals hidden in the forest. Investigate how shelter changes a tiny patch of ground, then follow a butterfly from egg to adult.</p>
-<div class="links"><a class="button primary" href="play/">Play the browser demo</a><a class="button" href="https://github.com/msfancypants07/Underleaf/releases/latest/download/Underleaf-macOS.zip">Download for Mac</a><a class="button" href="https://github.com/msfancypants07/Underleaf">View source on GitHub</a></div>
-<p class="note">Free tutorial demo · Best with a desktop browser, mouse, and keyboard · No account needed</p>
-<img src="tutorial.png" alt="Underleaf’s cloud-forest clearing, with a guided butterfly life cycle and sensory views." width="1280" height="800">
-<div class="columns"><section><h2>Observe, investigate, return.</h2><p>Seven guided chapters introduce hidden signals, a shelter comparison, and butterfly care. Time waits while you read. Your notebook keeps creatures, relationships, and life history together.</p><p>Habitat settings and development times are simplified for learning. Species pages include references and uncertainty notes.</p></section>
-<section><h2>Keep your forest.</h2><p>The browser demo saves in this browser. Private browsing or clearing site data can remove your progress. Desktop and browser saves are separate.</p><p>Already exploring? Open <strong>? → Begin a fresh tutorial</strong> to back up your current forest and start the walkthrough.</p></section></div>
-<h2>About the Mac download</h2><p>This universal Mac build includes Apple Silicon and Intel executables. It is locally signed, but <strong>not Apple-notarized</strong>; macOS may block a downloaded copy. The browser demo is the easiest way to try the game without installation. Intel hardware has not yet been tested.</p>
-<p>New releases update the download button automatically. Existing downloaded copies do not update themselves. <a href="https://github.com/msfancypants07/Underleaf/releases/latest">Release notes and downloads</a> · <a href="THIRD_PARTY_NOTICES.txt">Third-party notices</a></p>
+<header class="hero">
+<div class="eyebrow">Independent game project · Godot 4.4 · GDScript</div>
+<h1>UNDERLEAF</h1>
+<p class="lede">Underleaf is an educational exploration game about learning to read a cloud forest. The player follows signals that ordinary sight misses, runs a controlled habitat comparison, and cares for one butterfly from egg to adult while the notebook turns those actions into a record of evidence.</p>
+<div class="links"><a class="button primary" href="play/">Play the browser demo</a><a class="button" href="https://github.com/msfancypants07/Underleaf/releases/latest/download/Underleaf-macOS.zip">Download for Mac</a><a class="button" href="https://github.com/msfancypants07/Underleaf">Read the source</a></div>
+<p class="note">A free seven-chapter tutorial · Best on desktop with a mouse and keyboard · No account required</p>
+</header>
+
+<figure class="wide-figure">
+<img src="tutorial.png" alt="The Underleaf tutorial showing a procedural cloud-forest clearing, a pupa in its host patch, six sensory views, and the current learning objective." width="1280" height="800">
+<figcaption>The tutorial keeps the simulated forest, the current ecological objective, and the butterfly’s life stage visible in one interface.</figcaption>
+</figure>
+
+<section class="section">
+<div><div class="eyebrow">The project</div><h2>A small game built around observation</h2></div>
+<div class="section-copy">
+<p>I wanted the player’s progress to come from understanding a living system rather than collecting objects or clearing levels. Underleaf begins with a moving line of leafcutter ants and gradually introduces chemical trails, plant-borne vibration, ultraviolet contrast, ultrasound, and polarized light as translated ways of perceiving the same forest. Each view changes what information is available and leads to a new ecological question.</p>
+<p>The central investigation asks the player to compare a sheltered patch with an open one. Both begin equally wet, the player observes them over the same interval, changes cover in only one location, and repeats the comparison. The game records the result without treating a prediction as a grade, then carries that reasoning into a butterfly life cycle that gives the tutorial a concrete emotional ending.</p>
+<div class="facts"><div class="fact"><strong>7 chapters</strong><span>A complete tutorial from first observation to adult butterfly.</span></div><div class="fact"><strong>6 views</strong><span>Visible light and five translated sensory modes that alter discovery.</span></div><div class="fact"><strong>8 plates</strong><span>Species evidence, uncertainty notes, and a separate relationship study.</span></div></div>
+</div>
+</section>
+
+<section class="section">
+<div><div class="eyebrow">Engineering</div><h2>What I designed and implemented</h2></div>
+<div class="cards">
+<article class="card"><h3>Simulation and state</h3><p>The forest tracks local habitat conditions, seasonal moisture, gated sensory discoveries, a compressed life cycle, and a repeatable ecological experiment. Versioned saves migrate older forests while preserving observations and study evidence.</p></article>
+<article class="card"><h3>Procedural presentation</h3><p>The forest, insects, field plates, weather, and sensory cues are drawn in code instead of assembled from a conventional sprite pack. A custom interface keeps the diorama and field notebook visually coherent across the native and browser builds.</p></article>
+<article class="card"><h3>Tutorial architecture</h3><p>A persistent chapter guide exposes the current goal, next action, and reason it matters. Tutorial time advances only through deliberate actions, so reading cannot silently consume a life stage, while completed players can continue in a less constrained simulation.</p></article>
+<article class="card"><h3>Delivery and verification</h3><p>Automated suites exercise ecology, interface behavior, the comparison study, saving, migration, and the full tutorial path. GitHub Actions publishes a WebAssembly build to Pages and a universal macOS release with checksums from version tags.</p></article>
+</div>
+</section>
+
+<section class="section">
+<div><div class="eyebrow">Technical decisions</div><h2>Constraints shaped the design</h2></div>
+<div class="section-copy">
+<p>The browser and desktop editions share one Godot project, but their delivery environments are different. The web build uses a single-threaded export for broader browser compatibility, bundles its own licensed fonts, and stores progress in the browser. The macOS package contains Apple Silicon and Intel executables and keeps its save outside the app bundle, so replacing the application does not erase a player’s forest.</p>
+<p>The educational layer also required careful boundaries. Sensory modes are explicitly described as translations for a human player, habitat percentages and development time are labeled as game abstractions, and each species page separates supported natural history from provisional placement or fictionalized mechanics. The shelter trial supports a relationship inside the model; it does not claim to prove an animal’s preference.</p>
+<div class="status"><h3>Current status</h3><p>This is a focused tutorial build rather than a finished commercial release. Scientific review, broader novice playtesting, Intel runtime testing, richer accessibility support, and Apple notarization remain open work. The source, design document, tests, and release workflows are public so the project can be evaluated as an engineering artifact as well as played as a demo.</p><p><a href="https://github.com/msfancypants07/Underleaf">Explore the repository and design document</a> · <a href="https://github.com/msfancypants07/Underleaf/releases/latest">Read the latest release notes</a></p></div>
+</div>
+</section>
+
+<footer><p>Underleaf is an independent educational game project. Browser and desktop saves are separate. The Mac build is locally signed but not Apple-notarized; the browser demo is the easiest way to play without installation.</p><p><a href="THIRD_PARTY_NOTICES.txt">Third-party notices</a></p></footer>
 </main></body></html>
