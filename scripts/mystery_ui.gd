@@ -24,16 +24,16 @@ func sidebar(c: CanvasItem) -> void:
 	var body := ""
 	match m.phase:
 		"discovery":
-			if not m.trail_found: body = "The moving leaves vanish around the log. Try chemical perception, then inspect the route."
-			elif h.state.sense!=0: body = "The trail leads around the log. It reveals a route, not moisture. Return to visible light and inspect the two patches."
-			elif not m.ready(): body = "Why do these two patches look different? Inspect the forked stem and the opening. A and B on your keyboard also select them."
-			else: body = "Two patches, one question: which stays damp? Start both equally wet and compare after the same four hours. Change nothing yet. Predictions are optional."
-		"baseline": body = "First interval: both patches began equally wet. No cover has changed. Watch their surfaces, or skip ahead; each hourly observation is kept."
-		"baseline_ready": body = "Both patches began equally wet. Which stayed damp after four hours? Compare the saved pictures, then try adding cover above the open patch only."
-		"growing": body = "Shelter is growing at B. A stays unchanged. Growth is compressed into eight model hours; this is not a real plant-growth timetable."
-		"ready_trial": body = "Cover has grown above the open patch. Wet both patches equally again. Keep the ground and weather the same; only cover at B has changed."
-		"trial": body = "Second interval: the same weather, with more shelter at B. Watch the litter change. What do you expect compared with the earlier interval?"
-		"result": body = "Two intervals are ready to compare. Does B behave differently now? Check A too: it was left unchanged."
+			if not m.trail_found: body = "The ants repeatedly follow a route that ordinary vision cannot show. Translate their pheromone trail, then follow its strongest branch toward the fallen log."
+			elif h.state.sense!=0: body = "The chemical trail reveals where the ants traveled, but it cannot measure moisture. Return to ordinary light and inspect the two litter patches beside the log."
+			elif not m.ready(): body = "Patch A lies beneath a forked stem; Patch B is more exposed. Inspect both before deciding whether shelter might explain their different surfaces."
+			else: body = "Test one question: does shelter slow drying? Begin both patches equally wet and observe them for the same four hours without changing either one. This first interval is your baseline."
+		"baseline": body = "Baseline in progress: both patches began with equal modeled water under the same weather. Each one-hour step saves both surfaces so you can compare change over time."
+		"baseline_ready": body = "The sheltered patch retained more water after four hours, but the locations already differed. Compare the evidence, then change cover above B and repeat the same procedure."
+		"growing": body = "Only cover above B is changing; A remains the control. Eight model hours compress plant growth for play and do not represent a real timetable."
+		"ready_trial": body = "B now has more shelter. Wet both patches equally again and keep the weather, ground, and observation time the same so cover is the changed variable."
+		"trial": body = "Repeated comparison in progress: B now has more cover while A remains unchanged. Save each hourly observation and compare B with its own baseline behavior."
+		"result": body = "Both intervals are complete. Did B retain water differently after receiving cover? Check A as the control: similar behavior there makes the cover explanation stronger."
 	h.paragraph(c,body,1072,324,329,15,h.CREAM)
 	var y := 430.0
 	if m.phase=="discovery":
@@ -45,23 +45,23 @@ func sidebar(c: CanvasItem) -> void:
 			h.button(c,"B · Open patch"+(" ✓" if m.inspected[1] else ""),Rect2(1246,y,166,37),"m:inspect:1")
 			if m.ready():
 				h.button(c,"Optional prediction",Rect2(1072,y+47,340,37),"m:predict")
-				h.button(c,"Begin the first comparison",Rect2(1072,y+94,340,42),"m:baseline",true)
+				h.button(c,"Wet both equally · begin baseline",Rect2(1072,y+94,340,42),"m:baseline",true)
 			else: h.button(c,"Visible perception  [1]",Rect2(1072,y+47,340,37),"sense:0",h.state.sense==0)
 	elif m.phase in ["baseline","trial"]:
 		var run: Dictionary = m.baseline if m.phase=="baseline" else m.trial
 		h.text(c,"%.1f / 4 MODEL HOURS" % float(run.elapsed),1072,y,11,h.ACCENT,"mono")
 		h.box(c,Rect2(1072,y+14,340,7),h.LINE)
 		h.box(c,Rect2(1072,y+14,maxf(1,340*float(run.elapsed)/4),7),h.ACCENT)
-		h.button(c,"Observe one hour later",Rect2(1072,y+40,340,40),"m:advance",true)
+		h.button(c,"Advance 1 hour · save both surfaces",Rect2(1072,y+40,340,40),"m:advance",true)
 		h.button(c,"Watch in visible light",Rect2(1072,y+90,340,37),"sense:0")
 	elif m.phase=="baseline_ready":
 		h.button(c,"Compare saved observations",Rect2(1072,y,340,40),"m:journal",true)
 		if m.baseline_reviewed:
-			h.button(c,"Preview shelter at B",Rect2(1072,y+50,340,40),"m:preview")
+			h.button(c,"Change one variable · preview cover",Rect2(1072,y+50,340,40),"m:preview")
 	elif m.phase=="growing":
-		h.button(c,"Wait for the cover to grow",Rect2(1072,y+15,340,42),"m:advance",true)
+		h.button(c,"Advance 8 model hours · grow cover",Rect2(1072,y+15,340,42),"m:advance",true)
 	elif m.phase=="ready_trial":
-		h.button(c,"Repeat with equal starting water",Rect2(1072,y,340,42),"m:trial",true)
+		h.button(c,"Wet both equally · repeat comparison",Rect2(1072,y,340,42),"m:trial",true)
 		h.button(c,"Optional prediction",Rect2(1072,y+52,340,37),"m:predict")
 	else:
 		h.button(c,"Compare the two intervals",Rect2(1072,y,340,42),"m:journal",true)
@@ -105,18 +105,18 @@ func page(c: CanvasItem, view: String) -> void:
 	h.text(c,"RELATIONSHIP PLATE" if earned else "OBSERVATION JOURNAL",105,106,11,h.ACCENT,"mono")
 	h.text(c,"A Shelter That Holds" if earned else "The Patch That Holds the Mist",105,149,36,h.CREAM,"serif")
 	if view=="mystery_predict":
-		h.paragraph(c,"What do you think shelter might change? This is your interpretation, not a quiz. You can change your mind or skip this step.",106,216,1020,22,h.CREAM)
+		h.paragraph(c,"Before collecting evidence, state what you expect shelter to change. A prediction records your reasoning before the result is known; it is not a quiz, and revising it later is part of scientific thinking.",106,216,1120,22,h.CREAM)
 		var options := ["More shelter may slow drying.","Shelter may make no difference.","I want to watch first."]
 		for i in range(3): h.button(c,options[i],Rect2(106,329+i*78,880,54),"m:prediction:"+str(i),m.prediction==options[i])
 		h.button(c,"Skip prediction",Rect2(106,620,270,43),"close")
 		h.paragraph(c,"Your earlier predictions remain in the field notes. Revising one never costs progress.",106,716,1090,17)
 		return
 	if view=="mystery_preview":
-		h.paragraph(c,"Change one thing: encourage shelter at the opening. The forked-stem patch stays as it is. No animal is moved.",106,192,1090,18,h.CREAM)
+		h.paragraph(c,"Change one modeled variable: add cover above Patch B. Patch A remains unchanged as a control, helping you tell a cover effect from a change in the shared weather or starting conditions.",106,192,1160,18,h.CREAM)
 		observation_card(c,Rect2(105,231,577,362),m.baseline,"BEFORE · EXISTING COVER",4)
 		observation_card(c,Rect2(704,231,577,362),m.baseline,"PROPOSED · COVER AT B ONLY",4,true)
-		h.paragraph(c,"Preview of canopy only. Surface conditions shown are the baseline, not a predicted result. Growth takes a compressed eight-model-hour interval; the later experiment repeats the same weather.",106,630,1180,17,h.CREAM)
-		h.button(c,"Encourage shelter here",Rect2(106,732,370,46),"m:grow",true)
+		h.paragraph(c,"This preview changes canopy only; the surfaces still show baseline evidence rather than a predicted result. Growth takes a compressed eight-model-hour interval, after which both patches will be wetted equally under the same modeled weather.",106,630,1180,17,h.CREAM)
+		h.button(c,"Add cover above B only",Rect2(106,732,370,46),"m:grow",true)
 		h.button(c,"Keep observing",Rect2(493,732,274,46),"close")
 		return
 	if view=="mystery_notes":
@@ -141,11 +141,12 @@ func page(c: CanvasItem, view: String) -> void:
 	observation_card(c,Rect2(105,222,577,356),before,"FIRST INTERVAL · NO INTERVENTION",h.mystery_sample)
 	observation_card(c,Rect2(704,222,577,356),after,"REPEAT · MORE SHELTER AT B",h.mystery_sample)
 	var summary: String = m.plate_record.conclusion if earned else m.conclusion()
+	if earned: summary += " Patch A served as the unchanged control. The result supports a relationship inside this model; it does not prove that every sheltered forest patch behaves identically or that an animal prefers the patch."
 	if m.phase in ["baseline","trial"] and not earned: summary = "An interval is still running. These are the observations so far; wait for the full four-hour comparison before interpreting the outcome."
 	h.paragraph(c,summary,106,609,1160,17,h.CREAM)
 	if earned:
 		h.text(c,"RECORDED " + str(m.plate_record.time),106,683,11,h.ACCENT,"mono")
-		h.text(c,"Next: care for a life in the surrounding clearing.",590,683,14,h.MUTED)
+		h.text(c,"Next: apply habitat thinking to a butterfly host patch.",590,683,14,h.MUTED)
 		h.button(c,"Continue: your host patch" if h.tutorial_ui.active() else "Return to this place",Rect2(106,724,330,43),"t:home" if h.tutorial_ui.active() else "m:return")
 		h.button(c,"Your field notes",Rect2(453,724,252,43),"m:notes")
 	elif m.phase=="baseline_ready":

@@ -3,7 +3,31 @@ const Art = preload("res://scripts/forest.gd")
 
 var host: Control
 const CHAPTERS = ["Notice life", "Reveal a hidden world", "Ask, change, compare", "Make room for a life", "Practice new perceptions", "Return to a familiar life", "Tutorial complete"]
-const SENSE_NOTES = ["Ordinary light reveals shapes and movement.", "Chemical perception draws scent information as a trail you can follow.", "Vibration reveals signals traveling through living stems.", "Ultraviolet translates otherwise invisible contrasts into colors you can see.", "Ultrasound translates high-frequency sound into visible pulses and synthetic tones.", "Polarization reveals the orientation of reflected light as shifting bands."]
+const SENSE_NOTES = [
+	"Ordinary light reveals shapes and movement, but it represents only the narrow range of wavelengths human eyes detect.",
+	"Chemical perception translates a pheromone trail into a visible plume. A pheromone is a molecule released by one animal that changes the behavior of others of the same species.",
+	"Vibration perception reveals signals traveling through living stems. The plant acts as the communication channel, carrying motion between insects that may be hidden from one another.",
+	"Ultraviolet perception translates wavelengths beyond human vision. Many bees detect ultraviolet contrast, so a flower can present different information to a bee than it does to us.",
+	"Ultrasound perception slows and visualizes frequencies above ordinary human hearing. It makes an otherwise inaccessible exchange between a hunting bat and a clicking moth perceptible.",
+	"Polarization perception shows the orientation of reflected light as shifting bands. It is an analytical view for the player, not a claim that every animal shown can see polarized light."
+]
+
+const ENCOUNTER_QUESTIONS = {
+	"treehopper":"A stem can carry information as well as water. Treehoppers send vibrations through plant tissue, and some exchange patterned signals called duets. Find the repeating exchange traveling along a living stem.",
+	"bumblebee":"Human eyes detect only part of the electromagnetic spectrum. Many bees can detect ultraviolet wavelengths, and some flowers create strong ultraviolet contrast around their centers. Compare what this flower presents to a bee with what you see in ordinary light.",
+	"moth":"Bats hunt with echolocation: they emit high-frequency calls and interpret returning echoes. This tiger moth answers with rapid ultrasonic clicks. Enter the night forest and investigate how those signals overlap.",
+	"scarab":"This scarab's metallic appearance comes partly from microscopic structure in its outer covering, or cuticle, rather than pigment alone. Locate the beetle now; a later study will examine how its shell organizes reflected light.",
+	"ridge":"This is the same jewel scarab, seen through a different measurement. Polarization describes the orientation in which light waves oscillate. Watch how the translated pattern shifts across its curved shell."
+}
+
+const ENCOUNTER_INTERPRETATIONS = {
+	"ant":"Leafcutter ants do not eat the leaf fragments directly. Workers carry them underground as growing material for a cultivated fungus, which becomes the colony's food crop. The moving leaves are the visible edge of an insect agricultural system.",
+	"treehopper":"The pulses form a patterned exchange rather than random shaking. Plant-borne vibration lets small insects communicate through the stem without relying on an airborne call. The visualization is a translation of motion that normally requires specialized equipment to detect.",
+	"bumblebee":"The flower did not acquire a new pattern when you changed views. Ultraviolet perception revealed contrast that human vision omits. The game draws on bee vision, while this exact flower pattern and its relationship with this particular bumblebee remain illustrative.",
+	"moth":"The broad pulse represents a bat's searching call. The moth's rapid clicks overlap the returning information and make the target harder to track. This defensive strategy is called sonar jamming; the slowed sound and visible pulses are translations for human players.",
+	"scarab":"Microscopic layers in the scarab's cuticle interact with light to produce structural color. The ultrasound cue used to locate it is a game convention, not evidence that this beetle produces or detects ultrasound. The next encounter examines its optical signal.",
+	"ridge":"A familiar animal stands out because you measured a different property of the same reflected light. The bands translate an optical signature created by shell structure, illumination, and viewing angle; they do not establish that the scarab itself sees polarized light."
+}
 
 func active() -> bool:
 	return host.state.tutorial.enabled and not host.state.tutorial.completed
@@ -33,7 +57,7 @@ func specimen(id: String) -> Dictionary:
 	return {}
 
 func goal() -> String:
-	return ["Find and record the moving leaves.", "Follow a trail ordinary sight cannot reveal.", "Find out whether shelter changes drying.", "Prepare a host patch and welcome an egg.", "Learn each view while your butterfly develops.", "Return to the butterfly and observe its adult form.", "You have observed, investigated, and cared."][chapter()]
+	return ["Investigate what is carrying the moving leaves.", "Translate and follow the ants' chemical information.", "Test whether changing shelter alters water retention.", "Prepare a host patch and look for an egg.", "Use five translated senses to answer five questions.", "Follow the same butterfly through metamorphosis.", "Separate what you observed from what it can establish."][chapter()]
 
 func banner(c: CanvasItem) -> void:
 	var h = host
@@ -72,34 +96,34 @@ func sidebar(c: CanvasItem) -> void:
 	var id := target()
 	var sp := specimen(id)
 	if ch==0:
-		body = "Some leaves are moving across the forest floor. Click the outlined colony to inspect it, then record what you found."
-		why = "Your notebook keeps observations of living creatures. Nothing is captured."
+		body = "Pieces of leaf are moving across the forest floor. Look beneath them: what animal could move material many times its own size, and where might it be taking it?"
+		why = "Inspect before recording. Your notebook preserves an observation without collecting the animal."
 	elif ch==1:
-		body = "Try chemical perception, then follow the highlighted route beside the fallen log. A new view reveals information ordinary sight misses."
-		why = "These are translated sensory views. Recording an animal unlocks a learning tool in this game."
+		body = "The ants follow nearly the same route even where no path is visible. Translate their pheromone trail into a visible plume, then follow its strongest branch toward the fallen log."
+		why = "A pheromone is chemical information shared between members of a species. The view is a translation for you, not a new sense acquired by the ants."
 	elif ch==3:
-		body = "Your study showed how to compare habitat changes. Now prepare the host patch for a butterfly, using its separate care rules."
-		why = "The study changed only patch B. Butterfly care uses the surrounding clearing; its settings and timing are simplified game rules."
+		body = "Apply what you learned about local conditions to the surrounding clearing. A caterpillar depends on host plants: plants on which its species can feed during the larval stage. Prepare native growth, cover, and moisture before returning to inspect the leaf."
+		why = "These settings represent a simplified habitat relationship, not instructions for rearing a real butterfly."
 	elif ch==4:
-		body = "Next encounter: "+str(sp.common_name)+". Visit "+h.ZONES[int(sp.zone)]+", prepare its habitat, and inspect it in "+h.MODES[int(sp.mode)]+" perception."
-		why = "Each new view has one encounter to practice. Discovery cues are authored game conventions; species pages explain the evidence."
+		body = str(ENCOUNTER_QUESTIONS.get(id,"Investigate how this animal becomes visible through a different kind of information."))
+		why = "Visit "+h.ZONES[int(sp.zone)]+", prepare the indicated habitat, and use "+h.MODES[int(sp.mode)]+" perception. Recording this encounter advances one game day while your butterfly develops."
 	elif ch==5:
-		body = "Return to the host leaf in premontane forest. Follow the remaining stages, then click the adult's blue wings and record your observation."
-		why = "You are following the same life through change. Days and care conditions are compressed, not real-world rearing instructions."
+		body = butterfly_stage_explanation()
+		why = "You are following the same individual through complete metamorphosis. Each button states how far tutorial time will advance; the timetable is compressed for play."
 	else:
-		body = "You recorded hidden life, compared shelter, and followed a butterfly to adulthood. Your first forest story is complete."
-		why = "There is still room to explore. Extra notebook pages are optional discoveries, not missing tutorial tasks."
+		body = "You followed evidence from an unexplained movement to chemical signals, a controlled comparison, five translated senses, and a complete butterfly life cycle. Review what was observed, what was interpreted, and what remains uncertain."
+		why = "Science becomes more trustworthy when conclusions stay within the limits of the evidence."
 	if not id.is_empty() and h.selected==id and s.tutorial.inspected.has(id):
-		body = "Observed: "+str(sp.common_name)+". "+str(sp.fact if ch==0 else sp.signal)+" Record this encounter to keep its evidence and source in the notebook."
+		body = str(ENCOUNTER_INTERPRETATIONS.get(id,sp.fact))+" Record the encounter to preserve its evidence, source, and uncertainty note."
 	var y: float = h.paragraph(c,body,1072,280,332,16,h.CREAM)
 	y = h.paragraph(c,"WHY · "+why,1072,y+13,332,13,h.MUTED)+13
 	if ch==0:
 		if h.selected=="ant" and s.tutorial.inspected.has("ant"):
-			action(c,"Record the leafcutters", "document",y,true)
+			action(c,"Record the colony and reveal its trail", "document",y,true)
 		else: action(c,"Point out the colony", "t:point",y)
 	elif ch==1:
 		if s.zone!=0 or s.night: action(c,"Return to the clearing", "t:home",y,true)
-		elif s.sense!=1: action(c,"Reveal scent trails", "sense:1",y,true)
+		elif s.sense!=1: action(c,"Translate the pheromone trail", "sense:1",y,true)
 		else: action(c,"Follow the route beside the log", "m:trail",y,true)
 	elif ch==3:
 		if s.zone!=0 or s.night: action(c,"Return to the host patch", "t:home",y,true)
@@ -110,14 +134,14 @@ func sidebar(c: CanvasItem) -> void:
 		elif id=="ridge" and s.night: action(c,"Return to daylight","night",y,true)
 		elif s.id_is_night_target(id) and not s.night: action(c,"Enter the night forest","night",y,true)
 		elif s.sense!=int(sp.mode): action(c,"Try "+h.MODES[int(sp.mode)],"sense:"+str(sp.mode),y,true)
-		elif h.selected==id and s.tutorial.inspected.has(id): action(c,"Record "+str(sp.common_name),"document",y,true)
+		elif h.selected==id and s.tutorial.inspected.has(id): action(c,"Record evidence · advance one day","document",y,true)
 		else: action(c,"Point out the encounter","t:point",y)
 	elif ch==5:
 		if s.zone!=0 or s.night: action(c,"Return to your butterfly","t:home",y,true)
 		elif s.sense!=0: action(c,"Look in ordinary light","sense:0",y,true)
 		elif not s.adult:
 			if not safe_home(): action(c,"Restore cover and moisture","t:recover",y,true)
-			else: action(c,"Continue to the next change","t:wait",y,true)
+			else: action(c,butterfly_advance_label(),"t:wait",y,true)
 		elif h.selected=="morpho" and s.tutorial.inspected.has("morpho"): action(c,"Record your butterfly","document",y,true)
 		else: action(c,"Point out the butterfly","t:point",y)
 	else: action(c,"Celebrate your first forest","t:ending",y,true)
@@ -147,8 +171,21 @@ func care_actions(c: CanvasItem, y: float, butterfly: bool) -> void:
 			action(c,labels[key],"t:care:"+key,y,true)
 			return
 	if butterfly:
-		h.paragraph(c,"Host growth, cover, and moisture are ready.",1072,y,330,14,h.ACCENT)
-		action(c,"Return tomorrow: look for an egg","t:egg",y+42,true)
+		h.paragraph(c,"The host patch now has suitable growth, protective cover, and retained moisture.",1072,y,330,14,h.ACCENT)
+		action(c,"Advance one day · inspect the host leaf","t:egg",y+55,true)
+
+func butterfly_stage_explanation() -> String:
+	var s = host.state
+	if s.adult: return "The adult has emerged, a process called eclosion. Look for blue flashes in ordinary light, then inspect the same individual you first encountered as an egg."
+	if s.larva_age==0: return "The embryo is developing inside the egg. Advance one game day to find the newly emerged caterpillar, also called a larva: the feeding and growing stage of complete metamorphosis."
+	if s.larva_age<5: return "The caterpillar grows through stages called instars. An instar is the period between two molts, when the animal sheds an outer covering that can no longer expand with it."
+	return "The caterpillar has formed a pupa. It may appear inactive, but its body is reorganizing into the adult form inside. Advance to adult emergence, then inspect the wings in ordinary light."
+
+func butterfly_advance_label() -> String:
+	var s = host.state
+	if s.larva_age==0: return "Advance one day · find the caterpillar"
+	if s.larva_age<5: return "Advance to the final larval instar"
+	return "Advance to adult emergence"
 
 func safe_home() -> bool:
 	var h: Dictionary = host.state.habitats[0]
@@ -160,21 +197,25 @@ func page(c: CanvasItem, view: String) -> void:
 	var title := "Your First Forest"
 	var paragraphs: Array = []
 	if view=="tutorial_welcome":
-		paragraphs = ["You are a quiet presence watching over a cloud-forest clearing. Learn to notice its hidden inhabitants, understand how their surroundings change, and help a butterfly complete its life cycle.","Your journey: notice hidden life → investigate shelter → follow an egg to adulthood. Seven guided chapters connect these goals. Extra creature pages are optional.","Follow the chapter guide beside the forest. Click what it points out, then record what you observe. Time waits while you read; tutorial time advances only when you choose an action."]
+		paragraphs = ["You have arrived at a cloud-forest field station to investigate information that human senses only partly reveal. Animals here communicate through chemicals, vibrations, ultraviolet contrast, high-frequency sound, and patterns in reflected light.","Your task is to follow evidence rather than collect animals. You will begin with an unexplained movement, compare two small habitats, and observe one butterfly through a compressed life cycle. Each discovery adds a sourced field plate to your notebook.","The tutorial clock waits while you read. Time moves only when a button says that an hour, a day, or a field visit will pass. Before recording a discovery, ask: what changed in the forest, and what does that evidence allow you to conclude?"]
 	elif view=="tutorial_unlock":
 		title = h.MODES[s.unlocked]+" perception is ready"
-		paragraphs = ["You recorded an encounter. Your notebook preserves it, and a new way of noticing the forest is now available.",SENSE_NOTES[s.unlocked],"This is a learning tool unlocked by observation, not a creature acquiring a new biological sense. The next encounter lets you practice it."]
+		var completed_id := "ant" if s.unlocked==1 else ("treehopper" if s.unlocked==2 else ("bumblebee" if s.unlocked==3 else ("moth" if s.unlocked==4 else "scarab")))
+		paragraphs = [str(ENCOUNTER_INTERPRETATIONS[completed_id]),SENSE_NOTES[s.unlocked],"The notebook separates the observation from its interpretation and keeps an uncertainty note beside the source. The next encounter asks you to use this translated view to answer a new question."]
+	elif view=="tutorial_discovery":
+		title = "A familiar animal, newly measured"
+		paragraphs = [str(ENCOUNTER_INTERPRETATIONS["ridge"]),"Ordinary color and brightness do not describe every property of light. Polarization describes the orientation in which a light wave oscillates; the shifting bands make that property legible to a human player.","This is an optical study of the same jewel scarab, not another species. The ridge location and visualization remain interpretive, and the observation does not establish that the beetle sees polarization."]
 	elif view=="tutorial_history":
 		title = "A life in your clearing"
-		paragraphs = ["Egg → Caterpillar → Pupa → Adult", "Now: "+s.larva_stage()+". This same butterfly develops in premontane forest while you explore.","The host plants and eight-day development are simplified game rules. The shelter experiment did not test butterfly preference or establish care requirements."]
+		paragraphs = ["Egg → Caterpillar (larva) → Pupa → Adult", "Now: "+s.larva_stage()+". You are following the same individual through complete metamorphosis, a life cycle in which the immature and adult forms have very different bodies.",butterfly_stage_explanation(),"The host settings and eight-day development are compressed game rules. The shelter comparison tested modeled water retention; it did not test butterfly preference or establish real care requirements."]
 		for entry in s.tutorial.history.slice(maxi(0,s.tutorial.history.size()-5)):
 			paragraphs.append("Day %d · %s" % [entry.day,entry.stage])
 	elif view=="tutorial_end":
 		title = "Tutorial complete"
-		paragraphs = ["A blue morpho has emerged in the clearing you tended, and you recorded the adult without capturing it.","You followed the leafcutters, used five new sensory views, and compared the same patches before and after changing shelter. Your relationship page preserves the evidence.","You followed a butterfly from egg to adult. These observations, the relationship study, and its life history are together in your notebook.","Continue exploring this small forest, revisit a lesson, or try stewardship: how might you keep supporting this place? Additional species pages are optional."]
+		paragraphs = ["You began with unexplained movement and followed it into several kinds of evidence. Leafcutter agriculture led to chemical communication; a controlled comparison tested shelter and water retention; five translated views exposed information outside ordinary human perception.","You also followed one butterfly through complete metamorphosis. Its life history and the shelter study answer different questions: one concerns development and habitat relationships, while the other concerns modeled water retention. Neither is proof of the other.","Your notebook distinguishes observations from interpretations and uncertainty. An observation records what was detected, an interpretation explains what it may mean, and an uncertainty note identifies what the evidence cannot yet establish.","Free exploration restores the normal forest clock. Pause or Resume controls continuous time, while Next day advances directly. Additional species pages are optional discoveries."]
 	else:
 		title = "Revisit a lesson"
-		paragraphs = ["NOTICE · Click a moving creature, inspect it, then record an observation. Nothing is collected.","PERCEIVE · Choose an unlocked view with 1–6. Each translates a different kind of information; unlock order is a game convention.","COMPARE · At the log, inspect both patches in visible light. Start equally wet, compare after equal time, change cover at B only, and repeat. The study changes only the two local patches.","CARE · Prepare the premontane host patch and follow Egg → Caterpillar → Pupa → Adult in Life history. Conditions and days are illustrative; consult species sources for evidence.","RETURN · In exploration, Habitat offers full controls, and time can run or pause. Notebook pages keep your discoveries. Reviewing lessons does not reset your forest."]
+		paragraphs = ["NOTICE · Begin with a question. Inspect what changed in the scene before recording an observation; nothing is collected.","PREDICT · State what you expect when the game offers a prediction. It is a record of your reasoning, not a graded answer.","ACT · Translated senses reveal chemical, vibrational, ultraviolet, ultrasonic, and polarized information. Buttons explicitly state when an hour, day, or field visit will pass.","INTERPRET · Compare the result with the earlier condition. Keep the observation, its possible meaning, and its limits separate.","RETURN · After the tutorial, Habitat exposes full controls and time can run or pause. Reviewing these lessons does not reset your forest."]
 	if view=="tutorial_unlock" and s.larva_age>=0:
 		paragraphs.append("Meanwhile in your clearing: "+s.larva_stage()+". A game day passed during this field visit. Its life history is saved.")
 	h.text(c,title,105,146,38,h.CREAM,"serif")
@@ -184,10 +225,10 @@ func page(c: CanvasItem, view: String) -> void:
 	if view=="tutorial_end":
 		Art.draw_bug(c,Vector2(1130,584),specimen("morpho"),7.0,0.5)
 		h.text(c,"OBSERVED IN YOUR CLEARING",840,668,12,h.ACCENT,"mono")
-	if view=="tutorial_welcome": h.button(c,"Begin: follow the moving leaves",Rect2(107,737,425,46),"t:begin",true)
+	if view=="tutorial_welcome": h.button(c,"Begin by investigating the moving leaves",Rect2(107,737,480,46),"t:begin",true)
 	elif view=="tutorial_unlock": h.button(c,"Try "+h.MODES[s.unlocked]+" perception",Rect2(107,737,425,46),"t:try",true)
 	elif view=="tutorial_end":
-		h.button(c,"Continue exploring",Rect2(107,737,330,46),"t:finish",true)
+		h.button(c,"Complete the tutorial and explore freely",Rect2(107,737,390,46),"t:finish",true)
 		h.button(c,"Revisit a lesson",Rect2(460,737,300,46),"t:lessons")
 	else:
 		h.button(c,"Return to the forest",Rect2(107,737,330,46),"close",true)
@@ -225,8 +266,8 @@ func dispatch(parts: PackedStringArray) -> void:
 			var needs := requirements()
 			if needs.has(parts[2]):
 				s.habitats[s.zone][parts[2]] = maxf(s.habitats[s.zone][parts[2]],needs[parts[2]])
-				var reasons := {"plants":"Native growth now offers more host stems and flowers in this zone.","canopy":"Canopy now provides more protective cover in this zone.","moisture":"This zone now retains more moisture.","wood":"Decaying wood now remains in this zone's habitat."}
-				h.notify(reasons[parts[2]]+" These are the tutorial's simplified habitat settings.")
+				var reasons := {"plants":"Native growth now offers stems, flowers, and—at the home patch—leaf tissue that can represent a caterpillar host plant.","canopy":"Retained canopy moderates exposure in the simulation and provides more protective cover above this patch.","moisture":"Vegetation and litter now help this zone retain local moisture; this represents habitat structure, not directly watering an animal.","wood":"Decaying wood now remains as habitat and as a resource for organisms that depend on decomposition."}
+				h.notify(reasons[parts[2]]+" The percentage is a simplified game variable, not a field prescription.")
 		"recover":
 			for key in {"plants":65.0,"canopy":65.0,"moisture":65.0}:
 				s.habitats[0][key] = maxf(s.habitats[0][key],65.0)
@@ -235,6 +276,7 @@ func dispatch(parts: PackedStringArray) -> void:
 			if chapter()==3 and safe_home():
 				s.advance_day()
 				remember_stage()
+				h.notify("One game day passed. An egg now rests beneath the host leaf; the embryo is the first stage of this butterfly's life history.")
 		"wait":
 			if not safe_home(): return
 			var before: String = s.larva_stage()
